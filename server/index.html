@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Vocabularizer </title>
+<script src="jquery.min.js"></script>
+<script>
+$(document).click(function(){
+        //$("body").toggle();
+
+$.ajax({
+  type: "POST",
+  url: "pythoncode.py",
+  data: { param: "hello2"},
+  dataType: 'html',
+  success:function(response) {
+    $('body').html(response);
+  }})
+})
+</script>
+</head>
+<body>
+Intro
+</body>
+</html>

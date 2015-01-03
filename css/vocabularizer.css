@@ -1,0 +1,17 @@
+.header {
+	color: purple;
+	background-color: beige;
+	font-size: 20px;
+	font-family: times;
+}
+.answer {
+	padding-left: 50px;
+}
+.buttonDiv {
+	padding-left: 50px;
+}
+.textNode {
+	padding-right: 50px;
+	padding-left: auto;
+	/*background-color: beige; */
+}
