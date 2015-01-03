@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title> Vocabularizer </title>
+<script src="jquery.min.js"></script>
+<script type="text/javascript" language="javascript" src="js/vocabularizer.js"></script>
+<link rel="stylesheet" type="text/css" href="css/vocabularizer.css">
+<!--
+<script>
+$(document).click(function(){
+        //$("body").toggle();
+
+$.ajax({
+  type: "POST",
+  url: "pythoncode.py",
+  data: { param: "hello2"},
+  dataType: 'html',
+  success:function(response) {
+    $('body').html(response);
+  }})
+})
+</script>
+-->
+</head>
+<body>
+
+<div class="input">
+<p class="header">Input Text:</p>
+<textarea type="text" id="input_text"></textarea>
+<br>
+<button id="submit">submit</button>
+<button class="answer"> go </button>
+<br>
+<div class="exercise">
+<p class="header">Exercise:</p>
+</div>
+<ul>
+</ul>
+</body>
+</html>
