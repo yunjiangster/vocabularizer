@@ -5,13 +5,64 @@
 	font-family: times;
 }
 .answer {
-	padding-left: 50px;
+	padding-left: 50px; 
 }
 .buttonDiv {
 	padding-left: 50px;
 }
 .textNode {
-	padding-right: 50px;
+	/*padding-right: 50px;
 	padding-left: auto;
-	/*background-color: beige; */
+	background-color: beige; */
+}
+
+#pagingControls ul{display:inline;padding-left:0.5em}
+#pagingControls li{display:inline;padding:0 0.5em}
+
+.highlight {
+	background-color: red;
+}
+
+input {
+	box-shadow: inset 1px 1px 2px 0 #707070;
+}
+/*
+#paramSection {
+    overflow: hidden;
+}
+
+#paramSection .equal{
+	float: left;
+	margin: 20px;
+	padding-bottom: 1000px;
+    margin-bottom: -1000px;
+}
+*/
+#paramSection #submit{
+	 line-height: 600%;
+	 margin-left: 20px;
+}
+
+.table {
+	display: table;
+	border-spacing: 10px;
+	border-collapse: separate;
+}
+#paramSection {
+	display: table-row;
+}
+#inputSection {
+	margin-bottom: 20px;
+}
+#paramSection .equal {
+	display:table-cell;
+	vertical-align: top;
+}
+
+#paramSection #params .paramItem{
+	line-height:20px;
+}
+#paramSection #params br {
+	display: block;
+	margin: 2px 0;
 }

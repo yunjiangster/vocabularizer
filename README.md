@@ -1,0 +1,1 @@
+Enter any English prose in the input text box, select the number of exercises, exercise per page, and difficult level. Upon submitting, fill-in-the-blank exercises will be generated, one sentence apiece,  with no repeated sentences. 

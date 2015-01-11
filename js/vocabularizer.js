@@ -8,79 +8,267 @@ if(typeof(String.prototype.trim) === "undefined")
 }
 */
 
+// these are adapted from the jQuery version
+Node.prototype.highlight = function(pat) {
+ function innerHighlight(node, pat) {
+  var skip = 0;
+ 
+  if (node.nodeType == 3) {
+  	
+   var pos = node.data.toUpperCase().indexOf(pat);
+   if (pos >= 0) {
+   	
+    var spannode = document.createElement('span');
+    spannode.className = 'highlight';
+    console.log(spannode);
+    var middlebit = node.splitText(pos);
+    var endbit = middlebit.splitText(pat.length);
+    var middleclone = middlebit.cloneNode(true);
+    spannode.appendChild(middleclone);
+    middlebit.parentNode.replaceChild(spannode, middlebit);
+    
+    skip = 1;
+   }
+   
+  }
+  
+  else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+   for (var i = 0; i < node.childNodes.length; ++i) {
+    i += innerHighlight(node.childNodes[i], pat);
+   }
+  }
+  return skip;
+ }
+ return this && pat && pat.length ? innerHighlight(this, pat.toUpperCase()) : this;
+};
+
+Node.prototype.removeHighlight = function() {
+	var highlighted = this.querySelectorAll('span.highlight');
+	console.log(highlighted);
+	for (var i=0;i< highlighted.length; i++){
+		var current = highlighted[i];
+		console.log(current);
+		var cp = current.parentNode;
+		current.parentNode.firstChild.nodeName;
+		cp.replaceChild(current.firstChild, current);
+		cp.normalize();
+	}
+	return highlighted;
+}
+
+
+
+
 var textSpan = function (text){
 	return function(){
 		var span = document.createElement('span');
-		span.setAttribute('class','textNode');
-		span.appendChild(document.createTextNode(text));
+		span.innerHTML = text;
 		return span;
 	}();
 }
 
-findChildrenByTagName = function(obj, name){
-	var ret = [];
-	for (var k in obj.children){
-		if (obj.children[k].className === name){
-			ret.push(obj.children[k]);
-		}
-	}
-	return ret;
+tokenize = function(sentence,filt) {
+
+	var punct='\\['+ '\\!'+ '\\"'+ '\\#'+ '\\$'+   // since javascript does not
+          '\\%'+ '\\&'+ '\\\''+ '\\('+ '\\)'+  // support POSIX character
+          '\\*'+ '\\+'+ '\\,'+ '\\\\'+ '\\-'+  // classes, we'll need our
+          '\\.'+ '\\/'+ '\\:'+ '\\;'+ '\\<'+   // own version of [:punct:]
+          '\\='+ '\\>'+ '\\?'+ '\\@'+ '\\['+
+          '\\]'+ '\\^'+ '\\_'+ '\\`'+ '\\{'+
+          '\\|'+ '\\}'+ '\\~'+ '\\]',
+    re=new RegExp(     // tokenizer
+       '\\s*'+            // discard possible leading whitespace
+       '('+               // start capture group
+         '\\.{3}'+            // ellipsis (must appear before punct)
+       '|'+               // alternator
+         '\\w+\\-\\w+'+       // hyphenated words (must appear before punct)
+       '|'+               // alternator
+         '\\w+\'(?:\\w+)?'+   // compound words (must appear before punct)
+       '|'+               // alternator
+         '\\w+'+              // other words
+       '|'+               // alternator
+         '['+punct+']'+        // punct
+       ')'                // end capture group
+     );
+	  var result=[];
+	  var ary = sentence.split(re);
+	  for(var i=0,len=ary.length;i++ < len;) {
+	    var member=ary[i]||'';
+	    if(filt && (typeof filt === 'Function') ? filt(member) : member) {
+	      result.push(member);
+	    }
+	  }
+	  console.log(result);
+	  return result;
+
 }
 
+var selectSentence = function(){
+	textdict = {};
 
-createExercise = function(textarr){
+	var func = function(text, freqdict, lower, upper, needle){
+
+		var sentences = text.match( /[^\.!\?]+[\.!\?]+/g );
+		var ranklist = [];
+		for (var i =0 ; i < sentences.length; i++){
+			var sentence = sentences[i];
+			var tokens = tokenize(sentence);
+
+			for (var j = 0; j < tokens.length; j++){
+				var token = tokens[j];
+				var tokenLower= token.toLowerCase();
+
+				if (tokenLower in freqdict){
+
+					var rk = freqdict[tokenLower];
+					var item  ={};
+					item.token = token;
+					item.rank  = rk;
+					item.sentence = i;
+					item.word = j;
+					ranklist.push(item);
+					
+				}
+			}
+		}
+		if (lower === undefined || upper === undefined || needle === undefined){
+			return ranklist.length;
+		}
+
+		ranklist.sort(function(a,b){return a.rank - b.rank});
+		var wordsize = ranklist.length;
+		var ranklist2 = [];
+		if (! (text in textdict) ) { textdict[text] = []};
+		sentenceList = textdict[text];
+		for (var k=Math.floor(wordsize * lower); k < Math.floor(wordsize*upper);k++){
+			var item = ranklist[k];
+			if ( sentenceList.indexOf(sentences[item.sentence]) === -1 ){
+				ranklist2.push(item);
+			}
+		}
+		var wordsize2 = ranklist2.length;
+		if (wordsize2 === 0){ return null;}
+		var rank = Math.floor(wordsize2 * needle);
+		var ret2 = ranklist2[rank];
+		
+		sentenceList.push(sentences[ret2.sentence]);
+
+		return {word: ret2.token, sentence: sentences[ret2.sentence], wordIndex:ret2.word, rank: ret2.rank};
+	};
+	return func;
+}();
+
+createExercise = function(sentence, wordIndex, globalId){
 	// for now, just extract the first sentence of the input text
-
-
+	
+	var textarr = tokenize(sentence);
+	var missing = textarr[wordIndex];
 	var input = document.createElement('input');
-	input.size = textarr[0].length;
-	input.setAttribute('class','answer_input');
+	input.size = missing.length;
+	input.id = 'Input' + globalId;
 	var li = document.createElement('li');
 	var button =  document.createElement('button');
 	button.innerHTML = 'answer';
-	button.setAttribute('class','answer');
+	button.id = 'Button' + globalId;
+
 	li.setAttribute('class','exerciseItem');
+	li.appendChild(textSpan(textarr.slice(0,wordIndex).join(' ') + ' '));
 	li.appendChild(input);
-	li.appendChild(textSpan(' ' + textarr.slice(1).join(' ')));
+	li.appendChild(textSpan(' ' + textarr.slice(wordIndex+1).join(' ')));
 	li.appendChild(button);
+
+		$(document).on('click','#Button'+globalId, function(){
+				var ans = input.value;
+				if (ans === missing) {
+					$(this).parent().append(textSpan('yes!'));
+				}
+				else{
+					$(this).parent().append(textSpan('no!'));
+				}
+			});
+	li.text = sentence;
 	return li;
+
 }
+
+
 //http://jquery-howto.blogspot.com/2009/04/select-text-in-input-box-on-user-select.html
+var pager = new Imtech.Pager();
 main = function () {
+	var lis = [];
+
+	var globalId = 0;
+	var freqdict = {};
+	$.ajax({
+		type: "GET",
+		url: "resources/freq.100k",
+		dataType: "text",
+		success: function(data) {
+			var lines = data.trim('\n').split('\n');
+			for (var k = 0; k < lines.length; k++){
+				var tmp = lines[k].split('\t');
+				var rk = parseFloat(tmp[0]);
+				if (! ( tmp[1].toLowerCase() in freqdict ) ){
+					freqdict[tmp[1].toLowerCase()]=rk;
+				}
+			}
+		}
+	})
 	$("#submit").click(function(){
+		var nEx = parseFloat($('input#number').val().trim());
+		//var level = document.getElementById("difficulty").selectedIndex;
+		var level = parseFloat($("select#difficulty").val());
+		var text = $('textarea#input_text').val().trim();
+		var idx = 0;
+		for (var cnt = 0; cnt < nEx; cnt++) { 
+			globalId ++;
+			idx += 1;
 
-		var textarr = $('textarea#input_text').val().trim().match( /[^\.!\?]+[\.!\?]+/g )[0].split(' ');
-		var missing = textarr[0];
-		var li = createExercise(textarr);
-		var input = li.getElementsByClassName("answer_input")[0];
+			var needle = Math.random();
+			var selected = selectSentence(text, freqdict, level / 5, (level+1)/5, needle);		
+			if (! selected){ break;}
+			var wordIndex = selected.wordIndex;
 
-		var button = li.getElementsByClassName('answer')[0];
-		$("ul").append(li);
+			var li = createExercise(selected.sentence,wordIndex,globalId);
+			lis.push(li);
 
-		console.log($("ul").children("li").slice(-1)[0]);
+		}
 
-		$("ul").children("li").slice(-1).on("click", ".answer", function(){
-			console.log('?');
+	$("#searchButton").click(function(){
+		var query = $("#searchBox").val();
+		console.log(query);
+		var queryTerms = query.split(' ');
+		var results = new Array();
+		var display = false;
+		
+		lis.map(function(element){element.removeHighlight()});
 
-			var ans = input.value;
-			console.log(ans);
-			console.log(missing);
-			if (ans === missing) {
-				console.log('yes!');
-				$(this).parent().append(textSpan('yes!'));
-				//li.appendChild(document.createTextNode("yes!"));
+		for (var j =0; j < lis.length; j++){
+			display = false;
+			for (var i = 0; i < queryTerms.length; i++){
+				var q = queryTerms[i];
+				if (lis[j].text.indexOf(q) > -1){
+
+					//lis[j].style.display='block';
+					lis[j].style.height = 'auto';
+					lis[j].style.visibility='visible';
+					display = true;
+					break;
+				}
+				if (! display){
+					lis[j].style.height=0;
+					lis[j].style.visibility='hidden';
+				}
 			}
-			else{
-				console.log('no!');
-				//li.appendChild(document.createTextNode("no!"));
-			}
-		})
-
-
-		$("li:last").append(button);
-
+		}
+		pager.showPage(1);
 	})
 
-
+	pager.paragraphsPerPage = parseFloat($('input#numEx').val());
+	pager.pagingContainer = $('ol');
+	pager.paragraphs = lis;
+	pager.showPage(1);	
+	
+	})
 }
 $(document).ready(main);
