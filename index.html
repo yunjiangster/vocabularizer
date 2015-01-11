@@ -1,68 +1,68 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title> Vocabularizer </title>
-<script src="js/jquery.min.js"></script>
-<script src="js/imtech_pager.js"></script>
-<script type="text/javascript" language="javascript" src="js/vocabularizer.js"></script>
-<link rel="stylesheet" type="text/css" href="css/vocabularizer.css">
-<!--
-<script>
-$(document).click(function(){
-        //$("body").toggle();
+	<head>
+	<title> Vocabularizer </title>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/imtech_pager.js"></script>
+	<script type="text/javascript" language="javascript" src="js/vocabularizer.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/vocabularizer.css">
+	<!--
+	<script>
+	$(document).click(function(){
+	        //$("body").toggle();
 
-$.ajax({
-  type: "POST",
-  url: "pythoncode.py",
-  data: { param: "hello2"},
-  dataType: 'html',
-  success:function(response) {
-    $('body').html(response);
-  }})
-})
-</script>
--->
-</head>
-<body>
+	$.ajax({
+	  type: "POST",
+	  url: "pythoncode.py",
+	  data: { param: "hello2"},
+	  dataType: 'html',
+	  success:function(response) {
+	    $('body').html(response);
+	  }})
+	})
+	</script>
+	-->
+	</head>
+	<body>
 
-<div id="inputSection">
-<p class="header">Input Text:</p>
-<textarea type="text" id="input_text" rows="15" cols="80"></textarea>
-</div>
-<div class="table">
-<div id="paramSection">
-<div id="params" class="equal">
-<span class="paramItem">Number of Exercises: <input id="number" size=3></input></span>
-<br>
-<span class="paramItem"> 
-Difficulty Level: 
-<select id='difficulty'>
-	<option value=0>Beginner</option>
-	<option value=1>Easy</option>
-	<option value=2>Medium</option>
-	<option value=3>Difficult</option>
-	<option value=4>Ridiculous</option>
-</select>
-</span>
-<br>
-<span class="paramItem">
-Exercises Per Page:
-<input id="numEx" size=3></input>
-</span>
-</div>
-<button id="submit" class="equal">submit</button>
-</div>
-</div>
-<div id="searchSection">
-Search Exercises:
-<input id="searchBox" type="text" />
-<button id="searchButton">Search</button>
-</div>
-<div class="exercise">
-<p class="header">Exercises:</p>
-<ol>
-</ol>
-</div>
-<div id="pagingControls"></div>
-</body>
+		<div id="inputSection">
+			<p class="header">Input Text:</p>
+			<textarea type="text" id="input_text" rows="15" cols="80"></textarea>
+		</div>
+		<div class="table">
+			<div id="paramSection">
+				<div id="params" class="equal">
+					<span class="paramItem">Number of Exercises: <input id="number" size=3></input></span>
+					<br>
+					<span class="paramItem"> 
+						Difficulty Level: 
+						<select id='difficulty'>
+							<option value=0>Beginner</option>
+							<option value=1>Easy</option>
+							<option value=2>Medium</option>
+							<option value=3>Difficult</option>
+							<option value=4>Ridiculous</option>
+						</select>
+					</span>
+					<br>
+					<span class="paramItem">
+					Exercises Per Page:
+					<input id="numEx" size=3></input>
+					</span>
+				</div>
+				<button id="submit" class="equal">submit</button>
+			</div>
+		</div>
+		<div id="searchSection">
+			Search Exercises:
+			<input id="searchBox" type="text" />
+			<button id="searchButton">Search</button>
+		</div>
+		<div class="exercise">
+			<p class="header">Exercises:</p>
+			<ol>
+			</ol>
+		</div>
+		<div id="pagingControls"></div>
+	</body>
 </html>
