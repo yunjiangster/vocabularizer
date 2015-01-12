@@ -263,6 +263,7 @@ main = function () {
 					//lis[j].style.display='block';
 					lis[j].style.height = 'auto';
 					lis[j].style.visibility='visible';
+					lis[j].highlight(q);
 					display = true;
 					break;
 				}
