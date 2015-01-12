@@ -214,6 +214,17 @@ main = function () {
 			}
 		}
 	})
+
+	$.ajax({
+		type: "GET",
+		url: "resources/DeclarationOfIndependence.txt",
+		dataType: "text",
+		success: function(data) {
+			$("#input_text").val(data);
+		}
+	})
+
+
 	$("#submit").click(function(){
 		var nEx = parseFloat($('input#number').val().trim());
 		//var level = document.getElementById("difficulty").selectedIndex;
