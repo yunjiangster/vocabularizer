@@ -2,10 +2,35 @@
 <html>
 	<head>
 	<title> Vocabularizer </title>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/imtech_pager.js"></script>
-	<script type="text/javascript" language="javascript" src="js/vocabularizer.js"></script>
+
 	<link rel="stylesheet" type="text/css" href="css/vocabularizer.css">
+	    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery UI CSS -->
+    <link href="dist/css/jquery-ui.css" type="text/css" rel="stylesheet">
+    <!-- Bootstrap styling for Typeahead -->
+    <link href="dist/css/tokenfield-typeahead.css" type="text/css" rel="stylesheet">
+    <!-- Tokenfield CSS -->
+    <link href="dist/css/bootstrap-tokenfield.css" type="text/css" rel="stylesheet">
+    <!-- Docs CSS -->
+    <link href="docs-assets/css/pygments-manni.css" type="text/css" rel="stylesheet">
+    <link href="docs-assets/css/docs.css" type="text/css" rel="stylesheet">
+
+
+    <script src="js/jquery.min.js"></script>
+	<script src="js/imtech_pager.js"></script>
+	<script src="js/bootstrap-tokenfield.js"></script>
+	<script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="docs-assets/js/scrollspy.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="docs-assets/js/affix.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="docs-assets/js/typeahead.bundle.min.js" charset="UTF-8"></script>
+
+	<script type="text/javascript" language="javascript" src="js/vocabularizer.js"></script>
+
+    <script type="text/javascript" src="docs-assets/js/docs.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="js/bootstrap-tokenfield.js" charset="UTF-8"></script>
 	<!--
 	<script>
 	$(document).click(function(){
@@ -29,7 +54,7 @@
 			<p class="header">Input Text:</p>
 			<textarea type="text" id="input_text" rows="15" cols="80"></textarea>
 		</div>
-		<div class="table">
+		<div class="table-main">
 			<div id="paramSection">
 				<div id="params" class="equal">
 					<span class="paramItem">Number of Exercises: <input id="number" size=3 value=10></input></span>
@@ -55,7 +80,7 @@
 		</div>
 		<div id="searchSection">
 			Search Exercises:
-			<input id="searchBox" type="text" />
+			<input id="searchBox" type="text" class="form-control-2" data-tokens="red|yellow|green" placeholder="type something and hit enter"/>
 			<button id="searchButton">Search</button>
 		</div>
 		<div class="exercise">
@@ -64,5 +89,9 @@
 			</ol>
 		</div>
 		<div id="pagingControls"></div>
+
+
+
+
 	</body>
 </html>
