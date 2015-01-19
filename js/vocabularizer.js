@@ -201,7 +201,7 @@ main = function () {
 		url: "resources/freq.100k",
 		dataType: "text",
 		success: function(data) {
-			var lines = data.trim('\n').split('\n');
+			var lines = data.replace(/[\r]/gm,'').trim('\n').split('\n');
 			for (var k = 0; k < lines.length; k++){
 				var tmp = lines[k].split('\t');
 				var rk = parseFloat(tmp[0]);
