@@ -1,12 +1,3 @@
-/*
-if(typeof(String.prototype.trim) === "undefined")
-{
-    String.prototype.trim = function() 
-    {
-        return String(this).replace(/^\s+|\s+$/g, '');
-    };
-}
-*/
 
 // these are adapted from the jQuery version
 Node.prototype.highlight = function(pat) {
@@ -19,8 +10,7 @@ Node.prototype.highlight = function(pat) {
    if (pos >= 0) {
    	
     var spannode = document.createElement('span');
-    spannode.className = 'highlight';
-    console.log(spannode);
+    spannode.className = 'search-highlight';
     var middlebit = node.splitText(pos);
     var endbit = middlebit.splitText(pat.length);
     var middleclone = middlebit.cloneNode(true);
@@ -43,11 +33,9 @@ Node.prototype.highlight = function(pat) {
 };
 
 Node.prototype.removeHighlight = function() {
-	var highlighted = this.querySelectorAll('span.highlight');
-	console.log(highlighted);
+	var highlighted = this.querySelectorAll('span.search-highlight');
 	for (var i=0;i< highlighted.length; i++){
 		var current = highlighted[i];
-		console.log(current);
 		var cp = current.parentNode;
 		current.parentNode.firstChild.nodeName;
 		cp.replaceChild(current.firstChild, current);
@@ -98,7 +86,6 @@ tokenize = function(sentence,filt) {
 	      result.push(member);
 	    }
 	  }
-	  console.log(result);
 	  return result;
 
 }
@@ -195,6 +182,16 @@ createExercise = function(sentence, wordIndex, globalId){
 //http://jquery-howto.blogspot.com/2009/04/select-text-in-input-box-on-user-select.html
 var pager = new Imtech.Pager();
 main = function () {
+
+
+	$("#searchBox").tokenfield({
+	  autocomplete: {
+	    source: ['red','blue','green','yellow','violet','brown','purple','black','white'],
+	    delay: 100,
+	  },
+	  delimiter: '|',
+	  showAutocompleteOnFocus: true
+	});
 	var lis = [];
 
 	var globalId = 0;
@@ -245,36 +242,39 @@ main = function () {
 
 		}
 
-	$("#searchButton").click(function(){
-		var query = $("#searchBox").val();
-		console.log(query);
-		var queryTerms = query.split(' ');
-		var results = new Array();
-		var display = false;
-		
-		lis.map(function(element){element.removeHighlight()});
 
-		for (var j =0; j < lis.length; j++){
-			display = false;
-			for (var i = 0; i < queryTerms.length; i++){
-				var q = queryTerms[i];
-				if (lis[j].text.indexOf(q) > -1){
 
-					//lis[j].style.display='block';
-					lis[j].style.height = 'auto';
-					lis[j].style.visibility='visible';
-					lis[j].highlight(q);
-					display = true;
-					break;
-				}
-				if (! display){
-					lis[j].style.height=0;
-					lis[j].style.visibility='hidden';
+	$("#searchButton").click(
+		function(){
+			var query = $("#searchBox").val();
+			var queryTerms = query.split(' ');
+			var results = new Array();
+			var display = false;
+			
+			lis.map(function(element){element.removeHighlight()});
+
+			for (var j =0; j < lis.length; j++){
+				display = false;
+				for (var i = 0; i < queryTerms.length; i++){
+					var q = queryTerms[i];
+					if (lis[j].text.indexOf(q) > -1){
+
+						//lis[j].style.display='block';
+						lis[j].style.height = 'auto';
+						lis[j].style.visibility='visible';
+						lis[j].highlight(q);
+						display = true;
+						break;
+					}
+					if (! display){
+						lis[j].style.height=0;
+						lis[j].style.visibility='hidden';
+					}
 				}
 			}
+			pager.showPage(1);
 		}
-		pager.showPage(1);
-	})
+	)
 
 	pager.paragraphsPerPage = parseFloat($('input#numEx').val());
 	pager.pagingContainer = $('ol');
